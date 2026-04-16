@@ -37,13 +37,13 @@ class Main
 
 class Movie{
 
--Category : (Enum category)
+-Enum category
 }
 
 class Series{
 -int Season
 -int Episode
--Category : (Enum category)
+-Enum category
 }
 
 
@@ -85,7 +85,7 @@ class Menu{
 +User currentUser
 
 - void printSelectedMedia(ArrayList<Media>)
-+ void searchMedia(String input)
++ (ArrayList<Media>) searchMedia(String input)
 + ArrayList<Media> sortByCategories(Enum category)
 + void printWatchedMedia(User user)
 + void printSavedMedia(User user)
