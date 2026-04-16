@@ -103,6 +103,7 @@ Menu *-- Media
 
 Main --> StreamingService
 
+StreamingService *--- UserInput
 StreamingService *-- Media
 StreamingService *-- Menu
 StreamingService *-- User
