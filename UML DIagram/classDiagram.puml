@@ -1,28 +1,31 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
+
+
+
+'==Variabler og methods===
+
 class User{
 - username : String
 - password : String
 - savedMedia : list<Media>
 - watchedMovie : list<Media>
--
 
-+ void addWatchedMovie(Movie movie)
-+ void addSavedMovie(Movie movie)
-+ void removeSavedMovie(Movie movie)
+
++ void addWatchedMedia(Media Media)
++ void addSavedMedia(Media Media)
++ void removeSavedMedia(Media Media)
++ (ArrayList<Media>) getWatchedMedia()
++ (ArrayList<Media>) getSavedMedia()
 
 }
 
-
-
 abstract class Media{
 # String title
-# String category
+# ArrayList<Enum category> categories
 # int releaseYear
 # double rating
-
-
 
 + String toString()
 + void play()
@@ -33,12 +36,13 @@ abstract class Media{
 class Main
 
 class Movie{
+
 -Category : (Enum category)
 }
 
 class Series{
--int : Season
--int : Episode
+-int Season
+-int Episode
 -Category : (Enum category)
 }
 
@@ -47,14 +51,50 @@ enum Category
 class StreamingService{
 # ArrayList<User> users
 # ArrayList<Media> mediaList
+- Menu menu
+
++ void showMenu()
++ void loginUser()
++ void registerUser()
+
 
 }
-class FileHandler <<utility>>
+class FileHandler <<utility>> {
+
++ void readFiles(File csvfile)
++ void saveFiles(File csvfile)
+
++ void parseLogin(ArrayList<String>)
+
++ void parseMovies(ArrayList<String>)
+
++ void parseSeries((ArrayList<String>)
+
+
+}
+
+
+class UserInput <<utility>>{
+
+
++String promptUserString(String message)
++int promptUserInt(String message)
+
+}
 class Menu{
++User currentUser
+
 - void printSelectedMedia(ArrayList<Media>)
++ void searchMedia(String input)
 + ArrayList<Media> sortByCategories(Enum category)
++ void printWatchedMedia(User user)
++ void printSavedMedia(User user)
++ void selectMediaToPlay(int mediaIndex)
 
 }
+
+
+'==ARV===
 
 User *-- FileHandler
 StreamingService *-- FileHandler
