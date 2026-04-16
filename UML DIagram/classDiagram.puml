@@ -1,0 +1,80 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class User{
+- username : String
+- password : String
+- savedMedia : list<Media>
+- watchedMovie : list<Media>
+-
+
++ void addWatchedMovie(Movie movie)
++ void addSavedMovie(Movie movie)
++ void removeSavedMovie(Movie movie)
+
+}
+
+
+
+abstract class Media{
+# String title
+# String category
+# int releaseYear
+# double rating
+
+
+
++ String toString()
++ void play()
+
+
+}
+
+class Main
+
+class Movie{
+-Category : (Enum category)
+}
+
+class Series{
+-int : Season
+-int : Episode
+-Category : (Enum category)
+}
+
+
+enum Category
+class StreamingService{
+# ArrayList<User> users
+# ArrayList<Media> mediaList
+
+}
+class FileHandler <<utility>>
+class Menu{
+- void printSelectedMedia(ArrayList<Media>)
++ ArrayList<Media> sortByCategories(Enum category)
+
+}
+
+User *-- FileHandler
+StreamingService *-- FileHandler
+
+Menu *-- Media
+
+Main --> StreamingService
+
+StreamingService *-- Media
+StreamingService *-- Menu
+StreamingService *-- User
+
+
+Media <|-- Movie
+Media <|-- Series
+
+
+Movie <|-- Category
+Series <|-- Category
+
+
+
+@enduml
