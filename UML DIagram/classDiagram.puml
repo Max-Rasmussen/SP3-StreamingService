@@ -16,8 +16,8 @@ class User{
 + void addWatchedMedia(Media Media)
 + void addSavedMedia(Media Media)
 + void removeSavedMedia(Media Media)
-+ (ArrayList<Media>) getWatchedMedia()
-+ (ArrayList<Media>) getSavedMedia()
++ ArrayList<Media> getWatchedMedia()
++ ArrayList<Media> getSavedMedia()
 
 }
 
@@ -85,7 +85,7 @@ class Menu{
 +User currentUser
 
 - void printSelectedMedia(ArrayList<Media>)
-+ (ArrayList<Media>) searchMedia(String input)
++ ArrayList<Media> searchMedia(String input)
 + ArrayList<Media> sortByCategories(Enum category)
 + void printWatchedMedia(User user)
 + void printSavedMedia(User user)
