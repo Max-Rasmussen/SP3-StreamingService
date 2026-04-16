@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+
+usecase "Login" as UC1
+usecase "Register user" as UC2
+usecase "Search movie" as UC3
+usecase "Movies by category" as UC4
+usecase "Play movie" as UC5
+usecase "Save movie" as UC6
+usecase "Remove saved movie" as UC7
+usecase "Watched movies" as UC8
+usecase "Saved movies" as UC9
+usecase "Data handling & errors" as UC10
+
+User --> UC1
+User --> UC2
+
+UC1 --> UC3
+UC1 --> UC4
+UC1 --> UC8
+UC1 --> UC9
+
+UC3 --> UC5
+UC4 --> UC5
+
+UC5 --> UC8
+
+UC3 --> UC6
+UC4 --> UC6
+
+UC6 --> UC9
+UC9 --> UC7
+
+UC10 --> UC1
+UC10 --> UC2
+
+@enduml
