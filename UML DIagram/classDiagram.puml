@@ -26,6 +26,7 @@ abstract class Media{
 # ArrayList<Enum category> categories
 # int releaseYear
 # double rating
+# Enum category
 
 + String toString()
 + void play()
@@ -37,13 +38,13 @@ class Main
 
 class Movie{
 
--Enum category
+
 }
 
 class Series{
 -int Season
 -int Episode
--Enum category
+
 }
 
 
@@ -111,10 +112,7 @@ StreamingService *-- User
 
 Media <|-- Movie
 Media <|-- Series
-
-
-Movie <|-- Category
-Series <|-- Category
+Media *-- Category
 
 
 
