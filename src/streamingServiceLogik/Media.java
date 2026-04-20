@@ -1,11 +1,14 @@
 package streamingServiceLogik;
 
-import java.util.Locale;
+
+import jdk.jfr.Category;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Media {
     private String title;
-    private ArrayList<Locale.Category> categories;
+    private ArrayList<Catagory> categories;
     private double rating;
     private String releaseYear;
     private String onAir;
@@ -19,10 +22,10 @@ public class Media {
     //Film csv eksempel: The Godfather; 1972; Crime, Drama; 9,2;
     //Serires csv eksempel: Twin Peaks; 1990-1991; Crime, Drama, Mystery; 8,8; 1-8, 2-22;
 
-    public Media(String title, String releaseYear, String catagories, double rating){
+    public Media(String title, String releaseYear, ArrayList<Catagory> categories, double rating){
 this.title = title;
 this.releaseYear = releaseYear;
-this.categories = catagories; // mangler
+this.categories = categories;
 this.rating = rating;
 
 
@@ -33,10 +36,10 @@ this.rating = rating;
 
 
 
-    public Media(String title, String onAir, String catagories, double rating, String seasons, String episodes){
+    public Media(String title, String onAir, ArrayList<Category> categories, double rating, String seasons){
 this.title = title;
 this.onAir = onAir;
-this.categories = catagories; // mangler
+this.categories = categories;
 this.rating = rating;
 this.seasons = seasons;
 
