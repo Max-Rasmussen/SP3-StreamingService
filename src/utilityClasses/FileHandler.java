@@ -1,11 +1,13 @@
 package utilityClasses;
 
 import streamingServiceLogik.Media;
+import streamingServiceLogik.StreamingService;
 import streamingServiceLogik.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,27 +37,6 @@ public class FileHandler {
     }
 
 
-    public static ArrayList<User> loadUsers(String filePath) {
-        ArrayList<String> lines = readData(filePath);
-
-        //Ny tom arraylist blir lavet som vi fylder med user objekter
-
-        ArrayList<User> users = new ArrayList<>();
-
-        //Blir ved med at lave lines om til user til der ik er fler lines
-        for (String line : lines) {
-            String[] splitLine = line.split(";");
-
-            String userName = splitLine[0];
-            String userPassWord = splitLine[1];
-
-            User newUser = new User(userName, userPassWord);
-            users.add(newUser);
-        }
-        return users;
-    }
-
-
     public static ArrayList<Media> loadMediaItems(String filePath) {
         ArrayList<String> lines = readData(filePath);
 
@@ -72,7 +53,6 @@ public class FileHandler {
         if (checkMedia.length > 4) {
             isASeries = true;
         }
-
 
         for (String line : lines) {
             String[] splitLine = line.split(";");
@@ -95,7 +75,6 @@ public class FileHandler {
                 ratings = Double.parseDouble(ratingsSplitted[0].trim() + "." + ratingsSplitted[1].trim());
             }
 
-
             String seasons;
             if (isASeries) {
                 seasons = splitLine[4];
@@ -109,5 +88,112 @@ public class FileHandler {
         return mediaItems;
     }
 
+    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList){
 
+
+        ArrayList<Media> theMovies = StreamingService.getMovies();
+        ArrayList<Media> theSeries = StreamingService.getSeries();
+
+        ArrayList<Media> savedMedia = new ArrayList<>();
+
+        for (String indexnumberthingy : splittedSavedList){
+
+                if (indexnumberthingy.contains("m")) {
+                    String withoutLetter;
+                    if (indexnumberthingy.contains("W")) {
+                        withoutLetter = indexnumberthingy.replace("Wm", "");
+                    }else{
+                        withoutLetter = indexnumberthingy.replace("m", "");
+                    }
+                    int theActualMovieNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theMovies.get(theActualMovieNumber));
+
+                } else {
+                    String withoutLetter;
+                    if (indexnumberthingy.contains("W")) {
+                        withoutLetter = indexnumberthingy.replace("Ws", "");
+                    }else{
+                        withoutLetter = indexnumberthingy.replace("s", "");
+                    }
+                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theSeries.get(theActualSeriesNumber));
+                }
+            }
+        return savedMedia;
+    }
+
+    public static ArrayList<User> loadUsers(String filePath) {
+        ArrayList<String> lines = readData(filePath);
+
+        //Ny tom arraylist blir lavet som vi fylder med user objekter
+
+        ArrayList<User> users = new ArrayList<>();
+
+
+        //Blir ved med at lave lines om til user til der ik er fler lines
+        for (String line : lines) {
+            String[] splitLine = line.split(";");
+
+            String userName = splitLine[0];
+            String userPassWord = splitLine[1];
+
+            String[] splittedSavedList = splitLine[2].split(",");
+            String[] splittedWatchedList = splitLine[3].split(",");
+            ArrayList<Media> savedMedia = handleUserSavedWatchedMovie(splittedSavedList);
+            ArrayList<Media> watchedMeda = handleUserSavedWatchedMovie(splittedWatchedList);
+
+
+            User newUser = new User(userName, userPassWord, savedMedia, watchedMeda);
+            users.add(newUser);
+        }
+        return users;
+    }
+
+    public static void saveUsers(ArrayList<User> users) {
+        try (FileWriter writer = new FileWriter("Data/Users.csv")) {
+            for (User user : users) {
+                writer.write(user.getUserName() + ";" + user.getPassword() + ";");
+
+                for (Media item : user.getSavedMedia()) {
+                    for (Media item2 : StreamingService.getMovies()) {
+                        int counter = 1;
+                        if (item == item2) {
+                            writer.write("m" + counter + ",");
+                        }
+                        counter++;
+                    }
+
+                    for (Media item3 : StreamingService.getSeries()) {
+                        int counter = 1;
+                        if (item == item3) {
+                            writer.write("s" + counter + ",");
+                        }
+                        counter++;
+                    }
+                    writer.write(";");
+                }
+
+                for (Media item : user.getWatchedMovie()) {
+                    for (Media item3 : StreamingService.getMovies()) {
+                        int counter = 1;
+                        if (item == item3){
+                            writer.write("m" + counter + ",");
+                        }
+                        counter++;
+                    }
+
+                    for (Media item4 : StreamingService.getSeries()){
+                        int counter = 1;
+                        if (item == item4){
+                            writer.write("s" + counter + ",");
+                        }
+                        counter++;
+                    }
+                    writer.write(";" + "\n");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Fejl ved skrivning til fil!");
+        }
+    }
 }

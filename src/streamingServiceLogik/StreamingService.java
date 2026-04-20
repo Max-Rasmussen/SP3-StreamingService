@@ -7,19 +7,31 @@ import java.util.ArrayList;
 
 public class StreamingService {
 
+    private String streamingServiceName;
     protected ArrayList<User> users;
-    protected ArrayList<Media> movies;
-    protected ArrayList<Media> series;
+    protected static ArrayList<Media> movies;
+    protected static ArrayList<Media> series;
+    private Menu menu;
 
 
-    public StreamingService(){
+    public StreamingService(String name){
+        this.streamingServiceName = name;
         loadMedia();
         loadUsers();
     }
 
+    public static ArrayList<Media> getMovies() {
+        return movies;
+    }
+
+
+    public static ArrayList<Media> getSeries() {
+        return series;
+    }
+
     private void loadMedia(){
-       this.movies = FileHandler.loadMediaItems("Data/Movies.csv");
-       this.series = FileHandler.loadMediaItems("Data/Series.csv");
+       movies = FileHandler.loadMediaItems("Data/Movies.csv");
+       series = FileHandler.loadMediaItems("Data/Series.csv");
     }
 
 
@@ -27,10 +39,14 @@ public class StreamingService {
         this.users = FileHandler.loadUsers("Data/Users.csv");
     }
 
+    public void startStreamingService(){
+        System.out.println("=== Velkommen til " + streamingServiceName + "===");
+    }
+}
 
 
-
-    public void testOmUserOgMediaBlirLoadet(){
+/*
+public void testOmUserOgMediaBlirLoadet(){
 
         for (User user : users){
             System.out.println(user.getUserName());
@@ -51,4 +67,4 @@ public class StreamingService {
            System.out.println(series.getTitle());
        }
     }
-}
+ */

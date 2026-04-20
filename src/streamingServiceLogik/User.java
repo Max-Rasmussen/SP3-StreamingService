@@ -3,8 +3,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static sun.security.util.KnownOIDs.Data;
-
 
 public class User {
 
@@ -13,13 +11,23 @@ public class User {
     private ArrayList<Media> savedMedia;
     private ArrayList<Media> watchedMovies;
 
-    public User(String userName, String userPassWord) {
+    public User(String userName, String userPassWord, ArrayList<Media> savedMedia, ArrayList<Media> watchedMedia) {
         this.userName = userName;
         this.password = userPassWord;
-        this.savedMedia = new ArrayList<>();
-        this.watchedMovies = new ArrayList<>();
+        this.savedMedia = savedMedia;
+        this.watchedMovies = watchedMedia;
     }
 
+
+    public static void saveUsers(ArrayList<User> users) {
+        try (FileWriter writer = new FileWriter("Data/Users.csv")) {
+            for (User user : users) {
+                writer.write(user.getUserName() + ";" + user.getPassword() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Fejl ved skrivning til fil!");
+        }
+    }
 
 
 
