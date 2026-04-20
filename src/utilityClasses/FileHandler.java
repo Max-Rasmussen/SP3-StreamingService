@@ -50,28 +50,6 @@ public class FileHandler {
         return stringLines;
     }
 
-
-    public static ArrayList<User> loadUsers(String filePath) {
-        ArrayList<String> lines = readData(filePath);
-
-        //Ny tom arraylist blir lavet som vi fylder med user objekter
-
-        ArrayList<User> users = new ArrayList<>();
-
-        //Blir ved med at lave lines om til user til der ik er fler lines
-        for (String line : lines) {
-            String[] splitLine = line.split(";");
-
-            String userName = splitLine[0];
-            String userPassWord = splitLine[1];
-
-            User newUser = new User(userName, userPassWord);
-            users.add(newUser);
-        }
-        return users;
-    }
-
-
     public static ArrayList<Media> loadMediaItems(String filePath) {
         ArrayList<String> lines = readData(filePath);
 
@@ -125,39 +103,9 @@ public class FileHandler {
         return mediaItems;
     }
 
-    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList){
 
 
-        ArrayList<Media> theMovies = StreamingService.getMovies();
-        ArrayList<Media> theSeries = StreamingService.getSeries();
 
-        ArrayList<Media> savedMedia = new ArrayList<>();
-
-        for (String indexnumberthingy : splittedSavedList){
-
-                if (indexnumberthingy.contains("m")) {
-                    String withoutLetter;
-                    if (indexnumberthingy.contains("W")) {
-                        withoutLetter = indexnumberthingy.replace("Wm", "");
-                    }else{
-                        withoutLetter = indexnumberthingy.replace("m", "");
-                    }
-                    int theActualMovieNumber = Integer.parseInt(withoutLetter);
-                    savedMedia.add(theMovies.get(theActualMovieNumber));
-
-                } else {
-                    String withoutLetter;
-                    if (indexnumberthingy.contains("W")) {
-                        withoutLetter = indexnumberthingy.replace("Ws", "");
-                    }else{
-                        withoutLetter = indexnumberthingy.replace("s", "");
-                    }
-                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
-                    savedMedia.add(theSeries.get(theActualSeriesNumber));
-                }
-            }
-        return savedMedia;
-    }
 
     public static ArrayList<User> loadUsers(String filePath) {
         ArrayList<String> lines = readData(filePath);
@@ -185,6 +133,41 @@ public class FileHandler {
         }
         return users;
     }
+
+    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList){
+
+
+        ArrayList<Media> theMovies = StreamingService.getMovies();
+        ArrayList<Media> theSeries = StreamingService.getSeries();
+
+        ArrayList<Media> savedMedia = new ArrayList<>();
+
+        for (String indexnumberthingy : splittedSavedList){
+
+            if (indexnumberthingy.contains("m")) {
+                String withoutLetter;
+                if (indexnumberthingy.contains("W")) {
+                    withoutLetter = indexnumberthingy.replace("Wm", "");
+                }else{
+                    withoutLetter = indexnumberthingy.replace("m", "");
+                }
+                int theActualMovieNumber = Integer.parseInt(withoutLetter);
+                savedMedia.add(theMovies.get(theActualMovieNumber));
+
+            } else {
+                String withoutLetter;
+                if (indexnumberthingy.contains("W")) {
+                    withoutLetter = indexnumberthingy.replace("Ws", "");
+                }else{
+                    withoutLetter = indexnumberthingy.replace("s", "");
+                }
+                int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                savedMedia.add(theSeries.get(theActualSeriesNumber));
+            }
+        }
+        return savedMedia;
+    }
+
 
     public static void saveUsers(ArrayList<User> users) {
         try (FileWriter writer = new FileWriter("Data/Users.csv")) {
@@ -214,7 +197,7 @@ public class FileHandler {
                     for (Media item3 : StreamingService.getMovies()) {
                         int counter = 1;
                         if (item == item3){
-                            writer.write("m" + counter + ",");
+                            writer.write("Wm" + counter + ",");
                         }
                         counter++;
                     }
@@ -222,7 +205,7 @@ public class FileHandler {
                     for (Media item4 : StreamingService.getSeries()){
                         int counter = 1;
                         if (item == item4){
-                            writer.write("s" + counter + ",");
+                            writer.write("Ws" + counter + ",");
                         }
                         counter++;
                     }
