@@ -4,9 +4,8 @@ public class Main {
 
     static void main() {
 
-        StreamingService test = new StreamingService();
+        StreamingService test = new StreamingService("HBO");
 
 
-        test.testOmUserOgMediaBlirLoadet();
     }
 }
