@@ -1,10 +1,9 @@
 package streamingServiceLogik;
 
 
-import jdk.jfr.Category;
+
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class Media {
     private String title;
@@ -29,14 +28,9 @@ this.categories = categories;
 this.rating = rating;
 
 
-
-
-
     }
 
-
-
-    public Media(String title, String onAir, ArrayList<Category> categories, double rating, String seasons){
+    public Media(String title, String onAir, ArrayList<Catagory> categories, double rating, String seasons){
 this.title = title;
 this.onAir = onAir;
 this.categories = categories;
@@ -45,7 +39,6 @@ this.seasons = seasons;
 
 
     }
-
 
     public String getTitle() {
         return title;
@@ -68,10 +61,9 @@ this.seasons = seasons;
         return seasons;
     }
 
-
+@Override
     public String toString(){
-        return title;
-        // ikke færdig
+        return title + " " + releaseYear +  "  Rating: " + rating + " Kategorier: " + categories;
     }
 
     public void play(){
