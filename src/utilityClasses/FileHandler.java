@@ -122,10 +122,19 @@ public class FileHandler {
             String userName = splitLine[0];
             String userPassWord = splitLine[1];
 
+
             String[] splittedSavedList = splitLine[2].split(",");
             String[] splittedWatchedList = splitLine[3].split(",");
-            ArrayList<Media> savedMedia = handleUserSavedWatchedMovie(splittedSavedList);
-            ArrayList<Media> watchedMeda = handleUserSavedWatchedMovie(splittedWatchedList);
+
+            ArrayList<Media> savedMedia = new ArrayList<>();
+            ArrayList<Media> watchedMeda = new ArrayList<>();
+
+            if (splittedSavedList.length > 0) {
+                savedMedia = handleUserSavedWatchedMovie(splittedSavedList);
+            }
+            if (splittedWatchedList.length > 0) {
+                watchedMeda = handleUserSavedWatchedMovie(splittedWatchedList);
+            }
 
 
             User newUser = new User(userName, userPassWord, savedMedia, watchedMeda);
@@ -151,7 +160,7 @@ public class FileHandler {
                 }else{
                     withoutLetter = indexnumberthingy.replace("m", "");
                 }
-                int theActualMovieNumber = Integer.parseInt(withoutLetter);
+                int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
                 savedMedia.add(theMovies.get(theActualMovieNumber));
 
             } else {
@@ -176,7 +185,7 @@ public class FileHandler {
 
                 for (Media item : user.getSavedMedia()) {
                     for (Media item2 : StreamingService.getMovies()) {
-                        int counter = 1;
+                        int counter = 0;
                         if (item == item2) {
                             writer.write("m" + counter + ",");
                         }
@@ -184,7 +193,7 @@ public class FileHandler {
                     }
 
                     for (Media item3 : StreamingService.getSeries()) {
-                        int counter = 1;
+                        int counter = 0;
                         if (item == item3) {
                             writer.write("s" + counter + ",");
                         }
@@ -195,7 +204,7 @@ public class FileHandler {
 
                 for (Media item : user.getWatchedMovie()) {
                     for (Media item3 : StreamingService.getMovies()) {
-                        int counter = 1;
+                        int counter = 0;
                         if (item == item3){
                             writer.write("Wm" + counter + ",");
                         }
@@ -203,7 +212,7 @@ public class FileHandler {
                     }
 
                     for (Media item4 : StreamingService.getSeries()){
-                        int counter = 1;
+                        int counter = 0;
                         if (item == item4){
                             writer.write("Ws" + counter + ",");
                         }

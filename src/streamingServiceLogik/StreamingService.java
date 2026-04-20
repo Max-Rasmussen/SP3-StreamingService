@@ -42,6 +42,11 @@ public class StreamingService {
     public void startStreamingService(){
         System.out.println("=== Velkommen til " + streamingServiceName + "===");
     }
+
+    public void testUser(){
+        System.out.println(users.getFirst().getSavedMedia());
+        System.out.println(users.getFirst().getWatchedMovie());
+    }
 }
 
 
