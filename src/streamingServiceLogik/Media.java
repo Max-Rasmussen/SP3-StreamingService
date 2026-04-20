@@ -1,7 +1,18 @@
 package streamingServiceLogik;
 
+import java.util.Locale;
+import java.util.ArrayList;
+
 public class Media {
-    protected String title;
+    private String title;
+    private ArrayList<Locale.Category> categories;
+    private double rating;
+    private String releaseYear;
+    private String onAir;
+    private String seasons;
+
+
+// behøver måske ikke geter for episodes da seasons String vil indeholde
 
     //Constructerene for movie&series (lavede det for at prøve fileReaderen)
     //String type skal skiftes ud med Enum på begge
@@ -10,16 +21,58 @@ public class Media {
 
     public Media(String title, String releaseYear, String catagories, double rating){
 this.title = title;
+this.releaseYear = releaseYear;
+this.categories = catagories; // mangler
+this.rating = rating;
+
+
+
+
+
     }
 
 
 
-    public Media(String title, String onAir, String catagories, double rating, String seasons){
+    public Media(String title, String onAir, String catagories, double rating, String seasons, String episodes){
 this.title = title;
+this.onAir = onAir;
+this.categories = catagories; // mangler
+this.rating = rating;
+this.seasons = seasons;
+
+
     }
 
 
     public String getTitle() {
         return title;
     }
+
+    public double getRating(){
+        return rating;
+    }
+
+
+    public String getReleaseYear(){
+        return releaseYear;
+    }
+
+    public String getOnAir(){
+        return onAir;
+
+    }
+    public String getSeasons(){
+        return seasons;
+    }
+
+
+    public String toString(){
+        return title;
+        // ikke færdig
+    }
+
+    public void play(){
+        System.out.println( title + "afspilles nu ");
+    }
+
 }
