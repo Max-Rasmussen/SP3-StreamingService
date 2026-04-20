@@ -2,6 +2,7 @@ package utilityClasses;
 
 import streamingServiceLogik.Media;
 import streamingServiceLogik.User;
+import streamingServiceLogik.Category;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +10,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileHandler {
+
+    private static ArrayList<Category> parseCategories(String categoryString) {
+        ArrayList<Category> categories = new ArrayList<>();
+
+        String[] splitCategories = categoryString.split(",");
+
+        for (String category : splitCategories) {
+            String cleaned = category.trim().toUpperCase().replace("-", "_");
+            categories.add(Category.valueOf(cleaned));
+        }
+
+        return categories;
+    }
 
 
     private static ArrayList<String> readData(String filepath) {
@@ -78,7 +92,7 @@ public class FileHandler {
 
             String title = splitLine[0];
             String releaseDateOrRunTime = splitLine[1];
-            String catagories = splitLine[2];
+            ArrayList<Category> categories = parseCategories(splitLine[2]);
 
 
             //Der var problemer med ratings fordi de brugte et komma i stedet for et punktum i csv'en, dette var mit work around
@@ -98,10 +112,10 @@ public class FileHandler {
             String seasons;
             if (isASeries) {
                 seasons = splitLine[4];
-                Media newSeries = new Media(title, releaseDateOrRunTime, catagories, ratings, seasons);
+                Media newSeries = new Media(title, releaseDateOrRunTime, categories, ratings, seasons);
                 mediaItems.add(newSeries);
             } else {
-                Media newMovie = new Media(title, releaseDateOrRunTime, catagories, ratings);
+                Media newMovie = new Media(title, releaseDateOrRunTime, categories, ratings);
                 mediaItems.add(newMovie);
             }
         }
