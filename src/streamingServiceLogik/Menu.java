@@ -10,7 +10,7 @@ public class Menu {
     private ArrayList<User> users;
     private User currentUser;
 
-    public startMenu() {
+    public void startMenu() {
         scanner = new Scanner(System.in);
         users = FileHandler.loadUsers("Data/Users.csv");
     }
@@ -41,10 +41,9 @@ public class Menu {
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        User newUser = new User(username, password);
+        User newUser = new User(username, password, new ArrayList<Media>(), new ArrayList<Media>());
         users.add(newUser);
 
-        FileHandler.saveUsers(users);
 
         System.out.println("User is created!");
     }
@@ -68,13 +67,6 @@ public class Menu {
 
         System.out.println("Forkert login!");
     }
-
-
-
-
-
-    
-    
     
     
     
