@@ -104,9 +104,6 @@ public class FileHandler {
     }
 
 
-
-
-
     public static ArrayList<User> loadUsers(String filePath) {
         ArrayList<String> lines = readData(filePath);
 
@@ -143,7 +140,7 @@ public class FileHandler {
         return users;
     }
 
-    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList){
+    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList) {
 
 
         ArrayList<Media> theMovies = StreamingService.getMovies();
@@ -151,13 +148,13 @@ public class FileHandler {
 
         ArrayList<Media> savedMedia = new ArrayList<>();
 
-        for (String indexnumberthingy : splittedSavedList){
+        for (String indexnumberthingy : splittedSavedList) {
 
             if (indexnumberthingy.contains("m")) {
                 String withoutLetter;
                 if (indexnumberthingy.contains("W")) {
                     withoutLetter = indexnumberthingy.replace("Wm", "");
-                }else{
+                } else {
                     withoutLetter = indexnumberthingy.replace("m", "");
                 }
                 int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
@@ -167,7 +164,7 @@ public class FileHandler {
                 String withoutLetter;
                 if (indexnumberthingy.contains("W")) {
                     withoutLetter = indexnumberthingy.replace("Ws", "");
-                }else{
+                } else {
                     withoutLetter = indexnumberthingy.replace("s", "");
                 }
                 int theActualSeriesNumber = Integer.parseInt(withoutLetter);
@@ -180,47 +177,53 @@ public class FileHandler {
 
     public static void saveUsers(ArrayList<User> users) {
         try (FileWriter writer = new FileWriter("Data/Users.csv")) {
+
             for (User user : users) {
                 writer.write(user.getUserName() + ";" + user.getPassword() + ";");
 
+                // SAVED
                 for (Media item : user.getSavedMedia()) {
-                    for (Media item2 : StreamingService.getMovies()) {
-                        int counter = 0;
-                        if (item == item2) {
+
+                    int counter = 0;
+                    for (Media m : StreamingService.getMovies()) {
+                        if (item == m) {
                             writer.write("m" + counter + ",");
                         }
                         counter++;
                     }
 
-                    for (Media item3 : StreamingService.getSeries()) {
-                        int counter = 0;
-                        if (item == item3) {
+                    counter = 0;
+                    for (Media s : StreamingService.getSeries()) {
+                        if (item == s) {
                             writer.write("s" + counter + ",");
                         }
                         counter++;
                     }
-                    writer.write(";");
                 }
+                writer.write(";");
 
+                // WATCHED
                 for (Media item : user.getWatchedMovie()) {
-                    for (Media item3 : StreamingService.getMovies()) {
-                        int counter = 0;
-                        if (item == item3){
+
+                    int counter = 0;
+                    for (Media m : StreamingService.getMovies()) {
+                        if (item == m) {
                             writer.write("Wm" + counter + ",");
                         }
                         counter++;
                     }
 
-                    for (Media item4 : StreamingService.getSeries()){
-                        int counter = 0;
-                        if (item == item4){
+                    counter = 0;
+                    for (Media s : StreamingService.getSeries()) {
+                        if (item == s) {
                             writer.write("Ws" + counter + ",");
                         }
                         counter++;
                     }
-                    writer.write(";" + "\n");
                 }
+                writer.write(";\n");
             }
+
         } catch (IOException e) {
             System.out.println("Fejl ved skrivning til fil!");
         }
