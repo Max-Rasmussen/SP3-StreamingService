@@ -2,6 +2,7 @@ package streamingServiceLogik;
 import utilityClasses.FileHandler;
 import utilityClasses.Userinput;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -98,8 +99,8 @@ public class Menu {
         System.out.println("=== Media library ===");
         System.out.println("1. Search media by title");
         System.out.println("2. Search media by category");
-        System.out.println("3. See watched media");
-        System.out.println("4. See saved media");
+        System.out.println("3. See saved media");
+        System.out.println("4. See watched media");
         System.out.println("5. Quit streaming service");
 
         boolean choosing = true;
@@ -108,25 +109,35 @@ public class Menu {
             switch (choice){
 
                 case 1:
-
+                    String movieSearch = Userinput.promptString("Search for media:");
+                    selectMedia(searchMedia(movieSearch));
                     break;
 
 
                 case 2:
-
-
+                    //Ska laves stadigvæk
                     break;
 
 
                 case 3:
-
+                    if (!currentUser.getSavedMedia().isEmpty()){
+                        selectMedia(currentUser.getSavedMedia());
+                    }else{
+                        System.out.println("No saved movies");
+                    }
 
                     break;
 
                 case 4:
-
+                    if (!currentUser.getWatchedMovie().isEmpty()){
+                        selectMedia(currentUser.getWatchedMovie());
+                    }else{
+                        System.out.println("No watched movies");
+                    }
 
                     break;
+
+
 
 
                 case 5:
@@ -140,6 +151,38 @@ public class Menu {
                 default:
                     System.out.println("Invalid input");
                     break;
+            }
+        }
+    }
+
+    private void selectMedia(ArrayList<Media> listToPrint) {
+
+        int counter = 1;
+        for (Media item : listToPrint) {
+            System.out.println(counter + ".   " + item);
+            counter++;
+        }
+
+        System.out.println();
+        int choseMovie = Userinput.promptInt("Which media do you want to select? (input number)");
+
+        System.out.println("Selected: " + listToPrint.get(choseMovie));
+
+        boolean choosing = true;
+
+        while (choosing) {
+            int choiceToDo = Userinput.promptInt("1. Watch " + listToPrint.get(choseMovie).getTitle() + "           2. Add " + listToPrint.get(choseMovie).getTitle() + " to saved list      3. Go back");
+
+            if (choiceToDo == 1) {
+                listToPrint.get(choseMovie).play(currentUser);
+                choosing = false;
+            } else if (choiceToDo == 2) {
+                currentUser.addSavedMedia(listToPrint.get(choseMovie));
+                choosing = false;
+            } else if (choiceToDo == 3) {
+                break;
+            } else {
+                System.out.println("Invalid input");
             }
         }
     }

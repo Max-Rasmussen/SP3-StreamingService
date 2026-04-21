@@ -67,6 +67,24 @@ public class User {
     }
 
 
+    public void printWatchedMedia(){
+
+        int counter = 1;
+        for (Media item : watchedMovies){
+            System.out.println(counter + ". " +item);
+            counter++;
+        }
+    }
+
+    public void printSavedMedia(){
+
+        int counter = 1;
+        for (Media item : savedMedia){
+            System.out.println(counter + ". " +item);
+            counter++;
+        }
+    }
+
     @Override
     public String toString() {
         return "Username: " + userName +

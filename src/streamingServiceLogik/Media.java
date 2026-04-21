@@ -67,6 +67,7 @@ public class Media {
 
         public void play (User user) {
             System.out.println(title + "afspilles nu ");
+            user.addWatchedMovies(this);
         }
 
     }
