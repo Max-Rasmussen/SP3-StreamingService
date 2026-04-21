@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class StreamingService {
 
     private String streamingServiceName;
-    protected ArrayList<User> users;
-    protected static ArrayList<Media> movies;
-    protected static ArrayList<Media> series;
+    protected static ArrayList<User> users;
+    public static ArrayList<Media> movies;
+    public static ArrayList<Media> series;
     private Menu menu;
 
 
@@ -18,6 +18,15 @@ public class StreamingService {
         this.streamingServiceName = name;
         loadMedia();
         loadUsers();
+    }
+
+    private void loadMedia(){
+        movies = FileHandler.loadMediaItems("Data/Movies.csv");
+        series = FileHandler.loadMediaItems("Data/Series.csv");
+    }
+
+    private void loadUsers(){
+        this.users = FileHandler.loadUsers("Data/Users.csv");
     }
 
     public static ArrayList<Media> getMovies() {
@@ -29,14 +38,24 @@ public class StreamingService {
         return series;
     }
 
-    private void loadMedia(){
-       movies = FileHandler.loadMediaItems("Data/Movies.csv");
-       series = FileHandler.loadMediaItems("Data/Series.csv");
+    public static ArrayList<Media> getAllMedia(){
+        ArrayList<Media> allMedia = StreamingService.getMovies();
+        allMedia.addAll(series);
+        return allMedia;
+    }
+
+    public static ArrayList<User> getUsers(){
+        return users;
     }
 
 
-    private void loadUsers(){
-        this.users = FileHandler.loadUsers("Data/Users.csv");
+
+    public void addUser(User user){
+        this.users.add(user);
+    }
+
+    public void registerUser(){
+
     }
 
     public void startStreamingService(){
@@ -47,6 +66,7 @@ public class StreamingService {
         System.out.println(users.getFirst().getSavedMedia());
         System.out.println(users.getFirst().getWatchedMovie());
     }
+
 }
 
 

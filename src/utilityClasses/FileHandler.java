@@ -123,17 +123,17 @@ public class FileHandler {
             String userPassWord = splitLine[1];
 
 
-            String[] splittedSavedList = splitLine[2].split(",");
-            String[] splittedWatchedList = splitLine[3].split(",");
+            String[] splittedSavedOrWatchedList = splitLine[2].split(",");
+
 
             ArrayList<Media> savedMedia = new ArrayList<>();
             ArrayList<Media> watchedMeda = new ArrayList<>();
 
-            if (splittedSavedList.length > 0) {
-                savedMedia = handleUserSavedWatchedMovie(splittedSavedList);
+            if (splittedSavedOrWatchedList.length > 0) {
+                savedMedia = handleUserSavedMedia(splittedSavedOrWatchedList);
             }
-            if (splittedWatchedList.length > 0) {
-                watchedMeda = handleUserSavedWatchedMovie(splittedWatchedList);
+            if (splittedSavedOrWatchedList.length > 0) {
+                watchedMeda = handleUserWatchedMedia(splittedSavedOrWatchedList);
             }
 
 
@@ -143,7 +143,35 @@ public class FileHandler {
         return users;
     }
 
-    public static ArrayList<Media> handleUserSavedWatchedMovie(String[] splittedSavedList){
+    public static ArrayList<Media> handleUserWatchedMedia(String[] splittedSavedList){
+
+        ArrayList<Media> theMovies = StreamingService.getMovies();
+        ArrayList<Media> theSeries = StreamingService.getSeries();
+
+        ArrayList<Media> savedMedia = new ArrayList<>();
+
+        for (String indexnumberthingy : splittedSavedList){
+
+            if (!indexnumberthingy.contains("W")){
+                //Intet skal ske
+            }else{
+
+                if (indexnumberthingy.contains("m")) {
+                    String withoutLetter = indexnumberthingy.replace("Wm", "");
+                    int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
+                    savedMedia.add(theMovies.get(theActualMovieNumber));
+                }else{
+                    String withoutLetter = indexnumberthingy.replace("Ws", "");
+                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theSeries.get(theActualSeriesNumber));
+                }
+            }
+        }
+        return savedMedia;
+
+    }
+
+    public static ArrayList<Media> handleUserSavedMedia(String[] splittedSavedList){
 
 
         ArrayList<Media> theMovies = StreamingService.getMovies();
@@ -153,27 +181,21 @@ public class FileHandler {
 
         for (String indexnumberthingy : splittedSavedList){
 
-            if (indexnumberthingy.contains("m")) {
-                String withoutLetter;
-                if (indexnumberthingy.contains("W")) {
-                    withoutLetter = indexnumberthingy.replace("Wm", "");
-                }else{
-                    withoutLetter = indexnumberthingy.replace("m", "");
-                }
-                int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
-                savedMedia.add(theMovies.get(theActualMovieNumber));
+            if (indexnumberthingy.contains("W")){
+                //Intet skal ske
+            }else{
 
-            } else {
-                String withoutLetter;
-                if (indexnumberthingy.contains("W")) {
-                    withoutLetter = indexnumberthingy.replace("Ws", "");
+                if (indexnumberthingy.contains("m")) {
+                    String withoutLetter = indexnumberthingy.replace("m", "");
+                    int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
+                    savedMedia.add(theMovies.get(theActualMovieNumber));
                 }else{
-                    withoutLetter = indexnumberthingy.replace("s", "");
+                        String withoutLetter = indexnumberthingy.replace("s", "");
+                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theSeries.get(theActualSeriesNumber));
                 }
-                int theActualSeriesNumber = Integer.parseInt(withoutLetter);
-                savedMedia.add(theSeries.get(theActualSeriesNumber));
             }
-        }
+            }
         return savedMedia;
     }
 
@@ -184,42 +206,44 @@ public class FileHandler {
                 writer.write(user.getUserName() + ";" + user.getPassword() + ";");
 
                 for (Media item : user.getSavedMedia()) {
+                    int counter = 0;
+
                     for (Media item2 : StreamingService.getMovies()) {
-                        int counter = 0;
                         if (item == item2) {
                             writer.write("m" + counter + ",");
                         }
                         counter++;
                     }
 
+                    counter = 0;
                     for (Media item3 : StreamingService.getSeries()) {
-                        int counter = 0;
                         if (item == item3) {
                             writer.write("s" + counter + ",");
                         }
                         counter++;
                     }
-                    writer.write(";");
                 }
 
+
                 for (Media item : user.getWatchedMovie()) {
+                    int counter = 0;
+
                     for (Media item3 : StreamingService.getMovies()) {
-                        int counter = 0;
                         if (item == item3){
                             writer.write("Wm" + counter + ",");
                         }
                         counter++;
                     }
 
+                    counter = 0;
                     for (Media item4 : StreamingService.getSeries()){
-                        int counter = 0;
                         if (item == item4){
                             writer.write("Ws" + counter + ",");
                         }
                         counter++;
                     }
-                    writer.write(";" + "\n");
                 }
+                writer.write(";" + "\n");
             }
         } catch (IOException e) {
             System.out.println("Fejl ved skrivning til fil!");
