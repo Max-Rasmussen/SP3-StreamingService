@@ -65,7 +65,7 @@ public class Media {
             // ikke færdig
         }
 
-        public void play () {
+        public void play (User user) {
             System.out.println(title + "afspilles nu ");
         }
 

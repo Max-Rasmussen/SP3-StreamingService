@@ -52,12 +52,8 @@ public class StreamingService {
 
 
 
-    public void addUser(User user){
-        this.users.add(user);
-    }
-
-    public void registerUser(){
-
+    public static void addUser(User user){
+        users.add(user);
     }
 
     public void startStreamingService(){
