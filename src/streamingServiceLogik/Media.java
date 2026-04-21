@@ -2,6 +2,7 @@ package streamingServiceLogik;
 
 
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -77,4 +78,4 @@ this.seasons = seasons;
         System.out.println( title + "afspilles nu ");
     }
 
-}
+    }
