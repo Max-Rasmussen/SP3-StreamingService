@@ -7,30 +7,71 @@ import java.util.ArrayList;
 
 public class StreamingService {
 
-    protected ArrayList<User> users;
-    protected ArrayList<Media> movies;
-    protected ArrayList<Media> series;
+    private String streamingServiceName;
+    protected static ArrayList<User> users;
+    public static ArrayList<Media> movies;
+    public static ArrayList<Media> series;
+    private Menu menu;
 
 
-    public StreamingService(){
+    public StreamingService(String name){
+        this.streamingServiceName = name;
         loadMedia();
         loadUsers();
     }
 
     private void loadMedia(){
-       this.movies = FileHandler.loadMediaItems("Data/Movies.csv");
-       this.series = FileHandler.loadMediaItems("Data/Series.csv");
+        movies = FileHandler.loadMediaItems("Data/Movies.csv");
+        series = FileHandler.loadMediaItems("Data/Series.csv");
     }
-
 
     private void loadUsers(){
         this.users = FileHandler.loadUsers("Data/Users.csv");
     }
 
+    public static ArrayList<Media> getMovies() {
+        return movies;
+    }
+
+
+    public static ArrayList<Media> getSeries() {
+        return series;
+    }
+
+    public static ArrayList<Media> getAllMedia(){
+        ArrayList<Media> allMedia = movies;
+        allMedia.addAll(series);
+        return allMedia;
+    }
+
+    public static ArrayList<User> getUsers(){
+        return users;
+    }
 
 
 
-    public void testOmUserOgMediaBlirLoadet(){
+    public void addUser(User user){
+        this.users.add(user);
+    }
+
+    public void registerUser(){
+
+    }
+
+    public void startStreamingService(){
+        System.out.println("=== Velkommen til " + streamingServiceName + "===");
+    }
+
+    public void testUser(){
+        System.out.println(users.getFirst().getSavedMedia());
+        System.out.println(users.getFirst().getWatchedMovie());
+    }
+
+}
+
+
+/*
+public void testOmUserOgMediaBlirLoadet(){
 
         for (User user : users){
             System.out.println(user.getUserName());
@@ -51,4 +92,4 @@ public class StreamingService {
            System.out.println(series.getTitle());
        }
     }
-}
+ */

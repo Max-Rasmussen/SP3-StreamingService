@@ -1,11 +1,14 @@
 package utilityClasses;
 
 import streamingServiceLogik.Media;
+import streamingServiceLogik.StreamingService;
 import streamingServiceLogik.User;
 import streamingServiceLogik.Category;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -46,28 +49,6 @@ public class FileHandler {
         }
         return stringLines;
     }
-
-
-    public static ArrayList<User> loadUsers(String filePath) {
-        ArrayList<String> lines = readData(filePath);
-
-        //Ny tom arraylist blir lavet som vi fylder med user objekter
-
-        ArrayList<User> users = new ArrayList<>();
-
-        //Blir ved med at lave lines om til user til der ik er fler lines
-        for (String line : lines) {
-            String[] splitLine = line.split(";");
-
-            String userName = splitLine[0];
-            String userPassWord = splitLine[1];
-
-            User newUser = new User(userName, userPassWord);
-            users.add(newUser);
-        }
-        return users;
-    }
-
 
     public static ArrayList<Media> loadMediaItems(String filePath) {
         ArrayList<String> lines = readData(filePath);
@@ -123,4 +104,149 @@ public class FileHandler {
     }
 
 
+
+
+
+    public static ArrayList<User> loadUsers(String filePath) {
+        ArrayList<String> lines = readData(filePath);
+
+        //Ny tom arraylist blir lavet som vi fylder med user objekter
+
+        ArrayList<User> users = new ArrayList<>();
+
+
+        //Blir ved med at lave lines om til user til der ik er fler lines
+        for (String line : lines) {
+            String[] splitLine = line.split(";");
+
+            String userName = splitLine[0];
+            String userPassWord = splitLine[1];
+
+
+            String[] splittedSavedOrWatchedList = splitLine[2].split(",");
+
+
+            ArrayList<Media> savedMedia = new ArrayList<>();
+            ArrayList<Media> watchedMeda = new ArrayList<>();
+
+            if (splittedSavedOrWatchedList.length > 0) {
+                savedMedia = handleUserSavedMedia(splittedSavedOrWatchedList);
+            }
+            if (splittedSavedOrWatchedList.length > 0) {
+                watchedMeda = handleUserWatchedMedia(splittedSavedOrWatchedList);
+            }
+
+
+            User newUser = new User(userName, userPassWord, savedMedia, watchedMeda);
+            users.add(newUser);
+        }
+        return users;
+    }
+
+    public static ArrayList<Media> handleUserWatchedMedia(String[] splittedSavedList){
+
+        ArrayList<Media> theMovies = StreamingService.getMovies();
+        ArrayList<Media> theSeries = StreamingService.getSeries();
+
+        ArrayList<Media> savedMedia = new ArrayList<>();
+
+        for (String indexnumberthingy : splittedSavedList){
+
+            if (!indexnumberthingy.contains("W")){
+                //Intet skal ske
+            }else{
+
+                if (indexnumberthingy.contains("m")) {
+                    String withoutLetter = indexnumberthingy.replace("Wm", "");
+                    int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
+                    savedMedia.add(theMovies.get(theActualMovieNumber));
+                }else{
+                    String withoutLetter = indexnumberthingy.replace("Ws", "");
+                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theSeries.get(theActualSeriesNumber));
+                }
+            }
+        }
+        return savedMedia;
+
+    }
+
+    public static ArrayList<Media> handleUserSavedMedia(String[] splittedSavedList){
+
+
+        ArrayList<Media> theMovies = StreamingService.getMovies();
+        ArrayList<Media> theSeries = StreamingService.getSeries();
+
+        ArrayList<Media> savedMedia = new ArrayList<>();
+
+        for (String indexnumberthingy : splittedSavedList){
+
+            if (indexnumberthingy.contains("W")){
+                //Intet skal ske
+            }else{
+
+                if (indexnumberthingy.contains("m")) {
+                    String withoutLetter = indexnumberthingy.replace("m", "");
+                    int theActualMovieNumber = Integer.parseInt(withoutLetter.trim());
+                    savedMedia.add(theMovies.get(theActualMovieNumber));
+                }else{
+                        String withoutLetter = indexnumberthingy.replace("s", "");
+                    int theActualSeriesNumber = Integer.parseInt(withoutLetter);
+                    savedMedia.add(theSeries.get(theActualSeriesNumber));
+                }
+            }
+            }
+        return savedMedia;
+    }
+
+
+    public static void saveUsers(ArrayList<User> users) {
+        try (FileWriter writer = new FileWriter("Data/Users.csv")) {
+            for (User user : users) {
+                writer.write(user.getUserName() + ";" + user.getPassword() + ";");
+
+                for (Media item : user.getSavedMedia()) {
+                    int counter = 0;
+
+                    for (Media item2 : StreamingService.getMovies()) {
+                        if (item == item2) {
+                            writer.write("m" + counter + ",");
+                        }
+                        counter++;
+                    }
+
+                    counter = 0;
+                    for (Media item3 : StreamingService.getSeries()) {
+                        if (item == item3) {
+                            writer.write("s" + counter + ",");
+                        }
+                        counter++;
+                    }
+                }
+
+
+                for (Media item : user.getWatchedMovie()) {
+                    int counter = 0;
+
+                    for (Media item3 : StreamingService.getMovies()) {
+                        if (item == item3){
+                            writer.write("Wm" + counter + ",");
+                        }
+                        counter++;
+                    }
+
+                    counter = 0;
+                    for (Media item4 : StreamingService.getSeries()){
+                        if (item == item4){
+                            writer.write("Ws" + counter + ",");
+                        }
+                        counter++;
+                    }
+                }
+                writer.write(";" + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Fejl ved skrivning til fil!");
+        }
+    }
 }
