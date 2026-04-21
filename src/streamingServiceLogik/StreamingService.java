@@ -39,7 +39,7 @@ public class StreamingService {
     }
 
     public static ArrayList<Media> getAllMedia(){
-        ArrayList<Media> allMedia = StreamingService.getMovies();
+        ArrayList<Media> allMedia = movies;
         allMedia.addAll(series);
         return allMedia;
     }
