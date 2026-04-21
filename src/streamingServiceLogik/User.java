@@ -19,6 +19,8 @@ public class User {
     }
 
 
+
+
     public static void saveUsers(ArrayList<User> users) {
         try (FileWriter writer = new FileWriter("Data/Users.csv")) {
             for (User user : users) {

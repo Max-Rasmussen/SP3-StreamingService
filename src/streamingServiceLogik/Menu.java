@@ -1,4 +1,4 @@
-import streamingServiceLogik.*;
+package streamingServiceLogik;
 import utilityClasses.FileHandler;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ public class Menu {
     private ArrayList<User> users;
     private User currentUser;
 
-    public Menu() {
+    public startMenu() {
         scanner = new Scanner(System.in);
         users = FileHandler.loadUsers("Data/Users.csv");
     }
@@ -46,8 +46,30 @@ public class Menu {
 
         FileHandler.saveUsers(users);
 
-        System.out.println("Bruger oprettet!");
+        System.out.println("User is created!");
     }
+
+    private void login() {
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        for (User user : users) {
+            if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
+
+                currentUser = user;
+                System.out.println("Login succes!");
+                //metode skal kaldes for at komme videre til menu
+
+            }
+        }
+
+        System.out.println("Forkert login!");
+    }
+
+
 
 
 
