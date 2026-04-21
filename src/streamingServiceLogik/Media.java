@@ -69,10 +69,14 @@ this.seasons = seasons;
     }
 
 
-    public String toString(){
-        return title;
-        // ikke færdig
-    }
+
+        @Override
+        public String toString(){
+            return title + " " + releaseYear +  "  Rating: " + rating + " Kategorier: " + categories;
+
+        }
+
+
 
     public void play(){
         System.out.println( title + "afspilles nu ");
