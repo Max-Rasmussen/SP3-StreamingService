@@ -66,9 +66,9 @@ public class Media {
         return title + " " + releaseYear + " Rating: " + rating + " Kategorier: " + categories;
     }
 
-        public void play (User user) {
-            System.out.println(title + "afspilles nu ");
-            user.addWatchedMovies(this);
-        }
-
+    public void play (User user) {
+        System.out.println(title + "afspilles nu ");
+        user.addWatchedMovies(this);
     }
+
+}
