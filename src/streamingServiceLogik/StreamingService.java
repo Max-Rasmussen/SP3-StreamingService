@@ -57,7 +57,9 @@ public class StreamingService {
     }
 
     public void startStreamingService(){
-        System.out.println("=== Velkommen til " + streamingServiceName + "===");
+        System.out.println("=== Welcome to " + streamingServiceName + "===");
+        System.out.println();
+        menu.start();
 
     }
 

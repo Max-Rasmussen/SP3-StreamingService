@@ -2,8 +2,10 @@ package streamingServiceLogik;
 import utilityClasses.FileHandler;
 import utilityClasses.Userinput;
 
+import javax.xml.catalog.Catalog;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import java.util.ArrayList;
@@ -21,10 +23,7 @@ public class Menu {
 
     public void start() {
         while (true) {
-            System.out.println("\n=== HBO ===");
-            System.out.println("1. Opret bruger");
-            System.out.println("2. Log ind");
-            System.out.println("0. Afslut");
+            System.out.println("1. Register user                   2. Login                      0. Quit");
 
             boolean choosing = true;
             while (choosing) {
@@ -87,7 +86,7 @@ public class Menu {
                 System.out.println("Login succes!");
 
                 System.out.println();
-                //metode skal kaldes for at komme videre til menu
+                showMenu();
             }
         }
 
@@ -96,6 +95,7 @@ public class Menu {
 
 
     private void showMenu(){
+        while (true){
         System.out.println("=== Media library ===");
         System.out.println("1. Search media by title");
         System.out.println("2. Search media by category");
@@ -103,8 +103,6 @@ public class Menu {
         System.out.println("4. See watched media");
         System.out.println("5. Quit streaming service");
 
-        boolean choosing = true;
-        while (choosing){
             int choice = Userinput.promptInt("What would you like to do?");
             switch (choice){
 
@@ -116,6 +114,7 @@ public class Menu {
 
                 case 2:
                     //Ska laves stadigvæk
+                    printCatagories();
                     break;
 
 
@@ -200,15 +199,25 @@ public class Menu {
     }
 
 
-    public ArrayList<Media> sortByCategory(Category category) {
+    public ArrayList<Media> sortByCategory(ArrayList<Category> categories) {
         ArrayList<Media> results = new ArrayList<>();
 
-        for (Media media : StreamingService.getAllMedia()) {
-            if (media.getCategories().contains(category)) {
-                results.add(media);
+        for (Category category : categories) {
+            for (Media media : StreamingService.getAllMedia()) {
+                if (media.getCategories().contains(category)) {
+                    results.add(media);
+                }
             }
         }
 
         return results;
+    }
+
+    public void printCatagories(){
+        ArrayList<Category> categories = new ArrayList<>();
+
+        categories.addAll(Arrays.asList(Category.values()));
+
+        for (Catagory h)
     }
 }
