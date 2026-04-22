@@ -44,20 +44,23 @@ class StreamingService{
 # ArrayList<Media> seriesList
 - Menu menu
 
-+ void showMenu()
-+ void loginUser()
-+ void registerUser()
+
 - void loadUsers()
 - void loadMediaItems()
-
-
++ void addUser()
++ void startStreamingService()
++ void showMenu()
 }
 class FileHandler <<utility>> {
+- parseCategories(String categoryString)
+- void readData(String filePath)
 
-- void readFiles(String filePath)
 + void saveFiles(File csvfile)
++ static void saveUsers(ArrayList<User> users)
 + void loadUsers(String filePath)
 + void loadMediaItems(String filePath)
++ handleUserWatchedMedia(String[] splittedSavedList)
++ handleUserSavedMedia(String[] splittedSavedList)
 
 
 
@@ -98,6 +101,7 @@ StreamingService *--- UserInput
 StreamingService *-- Media
 StreamingService *-- Menu
 StreamingService *-- User
+
 Media *-- Category
 
 
