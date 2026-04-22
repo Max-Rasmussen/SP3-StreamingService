@@ -26,8 +26,8 @@ class Media{
 # int releaseYear
 # double rating
 # Enum category
-# int season
-# int episode
+# String season
+
 
 + String toString()
 + void play()
