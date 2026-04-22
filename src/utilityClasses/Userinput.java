@@ -1,5 +1,6 @@
 package utilityClasses;
 
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -8,10 +9,8 @@ public class Userinput {
 
     public static int promptInt(String message){
         System.out.println(message);
-        boolean awaitingInput = true;
 
-        while (awaitingInput){
-
+        while (true){
             try {
                 int number = userInput.nextInt();
                 userInput.nextLine();
@@ -20,18 +19,18 @@ public class Userinput {
                 }else{
                     System.out.println("Invalid");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid, input number");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid, please input a number.");
+                userInput.nextLine();
             }
-        }
-        return 0;
+                }
     }
 
 
     public static String promptString(String message){
         System.out.println(message);
 
-        return userInput.nextLine();
+        return userInput.nextLine().trim();
     }
 
 

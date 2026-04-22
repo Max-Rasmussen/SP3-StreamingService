@@ -9,13 +9,13 @@ public class User {
     private String userName;
     private String password;
     private ArrayList<Media> savedMedia;
-    private ArrayList<Media> watchedMovies;
+    private ArrayList<Media> watchedMedia;
 
     public User(String userName, String userPassWord, ArrayList<Media> savedMedia, ArrayList<Media> watchedMedia) {
         this.userName = userName;
         this.password = userPassWord;
         this.savedMedia = savedMedia;
-        this.watchedMovies = watchedMedia;
+        this.watchedMedia = watchedMedia;
     }
 
 
@@ -43,8 +43,8 @@ public class User {
     }
 
     public void addWatchedMovies(Media media) {
-        if (!watchedMovies.contains(media)) {
-            watchedMovies.add(media);
+        if (!watchedMedia.contains(media)) {
+            watchedMedia.add(media);
         }
     }
 
@@ -62,15 +62,15 @@ public class User {
         return savedMedia;
     }
 
-    public ArrayList<Media> getWatchedMovie() {
-        return watchedMovies;
+    public ArrayList<Media> getWatchedMedia() {
+        return watchedMedia;
     }
 
 
     public void printWatchedMedia(){
 
         int counter = 1;
-        for (Media item : watchedMovies){
+        for (Media item : watchedMedia){
             System.out.println(counter + ". " +item);
             counter++;
         }
@@ -89,7 +89,7 @@ public class User {
     public String toString() {
         return "Username: " + userName +
                 "\nSaved movies: " + savedMedia.size() +
-                "\nWatched movies: " + watchedMovies.size();
+                "\nWatched movies: " + watchedMedia.size();
     }
 
 }

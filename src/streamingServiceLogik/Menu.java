@@ -2,13 +2,8 @@ package streamingServiceLogik;
 import utilityClasses.FileHandler;
 import utilityClasses.Userinput;
 
-import javax.xml.catalog.Catalog;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-
-import java.util.ArrayList;
 
 public class Menu {
 
@@ -56,11 +51,19 @@ public class Menu {
 
         String password = Userinput.promptString("Password: ");
 
+        for(User user : StreamingService.getUsers()){
+            if (username.equals(user.getUserName()) && password.equals(user.getPassword())){
+                System.out.println("User already exists!");
+                return;
+            }
+        }
+
         User newUser = new User(username, password, new ArrayList<Media>(), new ArrayList<Media>());
+
         StreamingService.addUser(newUser);
 
 
-        System.out.println("User is created!");
+        System.out.println("User created!");
         System.out.println();
     }
 
@@ -109,7 +112,15 @@ public class Menu {
                     ArrayList<Category> chosenCategories = new ArrayList<>();
                     boolean choosingCategory = true;
                     while (choosingCategory) {
-                       int index = Userinput.promptInt("Which category do you want to search for?") - 1;
+                       int index;
+                        while (true) {
+                            index = Userinput.promptInt("Which category do you want to search for?") - 1;
+                            if (index > categories.size()){
+                                System.out.println("Invalid, try again");
+                            }else{
+                                break;
+                            }
+                        }
 
                         System.out.println(categories.get(index) + " added");
                         chosenCategories.add(categories.get(index));
@@ -133,8 +144,8 @@ public class Menu {
                     break;
 
                 case 4:
-                    if (!currentUser.getWatchedMovie().isEmpty()){
-                        selectMedia(currentUser.getWatchedMovie());
+                    if (!currentUser.getWatchedMedia().isEmpty()){
+                        selectMedia(currentUser.getWatchedMedia());
                     }else{
                         System.out.println("No watched movies");
                     }
@@ -161,6 +172,11 @@ public class Menu {
 
     private void selectMedia(ArrayList<Media> listToPrint) {
 
+        if (listToPrint.isEmpty()){
+            System.out.println("No media with that name / category");
+            return;
+        }
+
         int counter = 1;
         for (Media item : listToPrint) {
             System.out.println(counter + ".   " + item);
@@ -168,7 +184,16 @@ public class Menu {
         }
 
         System.out.println();
-        int choseMovie = Userinput.promptInt("Which media do you want to select? (input number)") - 1;
+
+        int choseMovie = 0;
+        while (true) {
+            choseMovie = Userinput.promptInt("Which media do you want to select? (input number)") - 1;
+            if (choseMovie > listToPrint.size()){
+                System.out.println("Invalid, try again");
+            }else{
+                break;
+            }
+        }
 
         System.out.println("Selected: " + listToPrint.get(choseMovie));
 

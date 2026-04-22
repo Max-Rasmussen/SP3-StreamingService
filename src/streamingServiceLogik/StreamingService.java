@@ -30,7 +30,7 @@ public class StreamingService {
     }
 
     private void loadUsers(){
-        this.users = FileHandler.loadUsers("Data/Users.csv");
+        users = FileHandler.loadUsers("Data/Users.csv");
     }
 
     public static ArrayList<Media> getMovies() {
@@ -43,7 +43,8 @@ public class StreamingService {
     }
 
     public static ArrayList<Media> getAllMedia(){
-        ArrayList<Media> allMedia = movies;
+        ArrayList<Media> allMedia = new ArrayList<>();
+        allMedia.addAll(movies);
         allMedia.addAll(series);
         return allMedia;
     }

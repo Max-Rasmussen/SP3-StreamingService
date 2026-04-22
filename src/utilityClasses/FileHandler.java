@@ -122,23 +122,28 @@ public class FileHandler {
             String userName = splitLine[0];
             String userPassWord = splitLine[1];
 
+            if (splitLine.length < 3) {
+                User newUserWithNoLists = new User(userName, userPassWord, new ArrayList<Media>(), new ArrayList<Media>());
+                users.add(newUserWithNoLists);
+            } else {
 
-            String[] splittedSavedOrWatchedList = splitLine[2].split(",");
+                String[] splittedSavedOrWatchedList = splitLine[2].split(",");
 
 
-            ArrayList<Media> savedMedia = new ArrayList<>();
-            ArrayList<Media> watchedMeda = new ArrayList<>();
+                ArrayList<Media> savedMedia = new ArrayList<>();
+                ArrayList<Media> watchedMeda = new ArrayList<>();
 
-            if (splittedSavedOrWatchedList.length > 0) {
-                savedMedia = handleUserSavedMedia(splittedSavedOrWatchedList);
+                if (splittedSavedOrWatchedList.length > 0) {
+                    savedMedia = handleUserSavedMedia(splittedSavedOrWatchedList);
+                }
+                if (splittedSavedOrWatchedList.length > 0) {
+                    watchedMeda = handleUserWatchedMedia(splittedSavedOrWatchedList);
+                }
+
+
+                User newUser = new User(userName, userPassWord, savedMedia, watchedMeda);
+                users.add(newUser);
             }
-            if (splittedSavedOrWatchedList.length > 0) {
-                watchedMeda = handleUserWatchedMedia(splittedSavedOrWatchedList);
-            }
-
-
-            User newUser = new User(userName, userPassWord, savedMedia, watchedMeda);
-            users.add(newUser);
         }
         return users;
     }
@@ -181,9 +186,7 @@ public class FileHandler {
 
         for (String indexnumberthingy : splittedSavedList){
 
-            if (indexnumberthingy.contains("W")){
-                //Intet skal ske
-            }else{
+            if (!indexnumberthingy.contains("W")){
 
                 if (indexnumberthingy.contains("m")) {
                     String withoutLetter = indexnumberthingy.replace("m", "");
@@ -202,21 +205,31 @@ public class FileHandler {
 
     public static void saveUsers(ArrayList<User> users) {
         try (FileWriter writer = new FileWriter("Data/Users.csv")) {
+            int counter = 0;
+
             for (User user : users) {
                 writer.write(user.getUserName() + ";" + user.getPassword() + ";");
 
                 for (Media item : user.getSavedMedia()) {
-                    int counter = 0;
+                    counter = 0;
 
                     for (Media item2 : StreamingService.getMovies()) {
+                        if (counter > StreamingService.getMovies().size()){
+                            break;
+                        }
                         if (item == item2) {
                             writer.write("m" + counter + ",");
+
                         }
                         counter++;
                     }
 
+
                     counter = 0;
                     for (Media item3 : StreamingService.getSeries()) {
+                        if (counter > StreamingService.getSeries().size()){
+                            break;
+                        }
                         if (item == item3) {
                             writer.write("s" + counter + ",");
                         }
@@ -225,10 +238,13 @@ public class FileHandler {
                 }
 
 
-                for (Media item : user.getWatchedMovie()) {
-                    int counter = 0;
+                for (Media item : user.getWatchedMedia()) {
+                    counter = 0;
 
                     for (Media item3 : StreamingService.getMovies()) {
+                        if (counter > StreamingService.getMovies().size()){
+                            break;
+                        }
                         if (item == item3){
                             writer.write("Wm" + counter + ",");
                         }
@@ -237,6 +253,9 @@ public class FileHandler {
 
                     counter = 0;
                     for (Media item4 : StreamingService.getSeries()){
+                        if (counter > StreamingService.getSeries().size()){
+                            break;
+                        }
                         if (item == item4){
                             writer.write("Ws" + counter + ",");
                         }
