@@ -12,7 +12,7 @@ public class Main {
         StreamingService test = new StreamingService("HBO");
 
 
-        test.testUser();
+        test.startStreamingService();
 
 
     }

@@ -12,23 +12,18 @@ import java.util.ArrayList;
 
 public class Menu {
 
-    private Scanner scanner;
     protected User currentUser;
 
 
 
-    public void startMenu() {
-        scanner = new Scanner(System.in);
-    }
 
     public void start() {
-        while (true) {
+        boolean choosing = true;
+        while (choosing) {
             System.out.println("1. Register user                   2. Login                      0. Quit");
 
-            boolean choosing = true;
-            while (choosing) {
-                int choice = scanner.nextInt();
-                scanner.nextLine();
+
+               int choice = Userinput.promptInt("");
 
                 switch (choice) {
 
@@ -51,18 +46,15 @@ public class Menu {
                         break;
                 }
             }
-        }
     }
 
     private void createUser() {
 
         System.out.println("You will need to make a username and password");
         System.out.println();
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
+        String username = Userinput.promptString("Username: ");
 
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = Userinput.promptString("Password: ");
 
         User newUser = new User(username, password, new ArrayList<Media>(), new ArrayList<Media>());
         StreamingService.addUser(newUser);
@@ -73,11 +65,10 @@ public class Menu {
     }
 
     private void login() {
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
+        String username = Userinput.promptString("Username: ");
 
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+
+        String password = Userinput.promptString("Password: ");
 
         for (User user : StreamingService.getUsers()) {
             if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
@@ -113,8 +104,22 @@ public class Menu {
 
 
                 case 2:
-                    //Ska laves stadigvæk
-                    printCatagories();
+
+                    ArrayList<Category> categories = printCatagories();
+                    ArrayList<Category> chosenCategories = new ArrayList<>();
+                    boolean choosingCategory = true;
+                    while (choosingCategory) {
+                       int index = Userinput.promptInt("Which category do you want to search for?") - 1;
+
+                        System.out.println(categories.get(index) + " added");
+                        chosenCategories.add(categories.get(index));
+                        boolean additional = Userinput.askYesNo("Do you want to add additional category (y/n)");
+                        if (!additional) {
+                            choosingCategory = false;
+                            ArrayList<Media> sortedList = sortByCategory(chosenCategories);
+                            selectMedia(sortedList);
+                        }
+                    }
                     break;
 
 
@@ -163,7 +168,7 @@ public class Menu {
         }
 
         System.out.println();
-        int choseMovie = Userinput.promptInt("Which media do you want to select? (input number)");
+        int choseMovie = Userinput.promptInt("Which media do you want to select? (input number)") - 1;
 
         System.out.println("Selected: " + listToPrint.get(choseMovie));
 
@@ -202,10 +207,13 @@ public class Menu {
     public ArrayList<Media> sortByCategory(ArrayList<Category> categories) {
         ArrayList<Media> results = new ArrayList<>();
 
+
         for (Category category : categories) {
             for (Media media : StreamingService.getAllMedia()) {
                 if (media.getCategories().contains(category)) {
-                    results.add(media);
+                    if (!results.contains(media)) {
+                        results.add(media);
+                    }
                 }
             }
         }
@@ -213,11 +221,16 @@ public class Menu {
         return results;
     }
 
-    public void printCatagories(){
+    public ArrayList<Category> printCatagories(){
         ArrayList<Category> categories = new ArrayList<>();
 
         categories.addAll(Arrays.asList(Category.values()));
 
-        for (Catagory h)
+        int counter = 0;
+        for (Category catagory : categories){
+            counter++;
+            System.out.println(counter + ". " +catagory);
+        }
+        return categories;
     }
 }

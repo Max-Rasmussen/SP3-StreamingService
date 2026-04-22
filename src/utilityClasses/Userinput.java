@@ -1,5 +1,6 @@
 package utilityClasses;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Userinput {
@@ -10,15 +11,16 @@ public class Userinput {
         boolean awaitingInput = true;
 
         while (awaitingInput){
+
             try {
                 int number = userInput.nextInt();
                 userInput.nextLine();
-                if (number > 1){
+                if (number >= 0){
                     return number;
                 }else{
-                    System.out.println("Invalid, input number above 0");
+                    System.out.println("Invalid");
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid, input number");
             }
         }
@@ -31,4 +33,18 @@ public class Userinput {
 
         return userInput.nextLine();
     }
+
+
+    public static boolean askYesNo(String message){
+        while (true){
+        String answer = promptString(message);
+        if (answer.equals("y") || answer.equals("yes")){
+            return true;
+        } else if (answer.equals("n") || answer.equals("no")) {
+            return false;
+        }else{
+            System.out.println("Invalid input");
+        }
+        }
+        }
 }
