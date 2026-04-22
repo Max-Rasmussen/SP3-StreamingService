@@ -63,34 +63,6 @@ public class StreamingService {
 
     }
 
-    public void testUser(){
-        System.out.println(users.getFirst().getSavedMedia());
-        System.out.println(users.getFirst().getWatchedMovie());
-    }
 
 }
 
-
-/*
-public void testOmUserOgMediaBlirLoadet(){
-
-        for (User user : users){
-            System.out.println(user.getUserName());
-        }
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        for (Media movie : movies){
-            System.out.println(movie.getTitle());
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-       for (Media series : series){
-           System.out.println(series.getTitle());
-       }
-    }
- */
