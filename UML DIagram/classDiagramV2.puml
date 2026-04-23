@@ -69,21 +69,27 @@ class FileHandler <<utility>> {
 
 
 class UserInput <<utility>>{
-
-
 +String promptUserString(String message)
 +int promptUserInt(String message)
++boolean askUserYesNo(String message)
++double promptDouble(String message)
 
 }
 class Menu{
 +User currentUser
 
-- void printSelectedMedia(ArrayList<Media>)
++ void start()
+- void selectMedia(ArrayList<Media> listToPrint)+ ArrayList<Media> searchMedia(String input)
 + ArrayList<Media> searchMedia(String input)
-+ ArrayList<Media> sortByCategories(Enum category)
-+ void printWatchedMedia(User user)
-+ void printSavedMedia(User user)
-+ void selectMediaToPlay(int mediaIndex)
++ ArrayList<Media> sortByCategory(ArrayList<Category> categories) + ArrayList<Media> searchMedia(String input)
++ ArrayList<Category> printCatagories()
++ ArrayList<Media> sortByRatingLowestToHighest()
++ ArrayList<Media> sortByRatingHighestToLowest()
++ ArrayList<Media> atLeastThisRating(double rating)
+- void showMenu()
+- void createUser()
+- void login()
+
 
 }
 
