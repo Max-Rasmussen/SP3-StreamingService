@@ -46,4 +46,24 @@ public class Userinput {
         }
         }
         }
+
+
+        public static Double promptDouble(String message){
+            System.out.println(message);
+
+            while (true){
+                try {
+                    double number = userInput.nextDouble();
+                    userInput.nextLine();
+                    if (number >= 0){
+                        return number;
+                    }else{
+                        System.out.println("Invalid");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid, please input a number.");
+                    userInput.nextLine();
+                }
+            }
+        }
 }

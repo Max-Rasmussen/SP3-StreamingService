@@ -4,6 +4,7 @@ import utilityClasses.Userinput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Menu {
 
@@ -62,7 +63,6 @@ public class Menu {
 
         StreamingService.addUser(newUser);
 
-
         System.out.println("User created!");
         System.out.println();
     }
@@ -93,9 +93,10 @@ public class Menu {
         System.out.println("=== Media library ===");
         System.out.println("1. Search media by title");
         System.out.println("2. Search media by category");
-        System.out.println("3. See saved media");
-        System.out.println("4. See watched media");
-        System.out.println("5. Quit streaming service");
+            System.out.println("3. Search media by rating");
+        System.out.println("4. See saved media");
+        System.out.println("5. See watched media");
+        System.out.println("6. Quit streaming service");
 
             int choice = Userinput.promptInt("What would you like to do?");
             switch (choice){
@@ -133,8 +134,46 @@ public class Menu {
                     }
                     break;
 
-
                 case 3:
+
+                    System.out.println("1. Sort from highest to lowest");
+                    System.out.println("2. Sort from lowest to highest");
+                    System.out.println("3. Sort from custom input (has to be at least this rating to show up)");
+                    System.out.println("4. Go back");
+                    int ratingChoice = Userinput.promptInt("How do you want to sort by rating?");
+
+
+                    switch (ratingChoice){
+
+                        case 1:
+                            selectMedia(sortByRatingHighestToLowest());
+
+                            break;
+
+                        case 2:
+                            selectMedia(sortByRatingLowestToHighest());
+
+                            break;
+
+                        case 3:
+                            double chosenRating = Userinput.promptDouble("Input rating to sort by (can be decimal)");
+                            selectMedia(atLeastThisRating(chosenRating));
+
+                        break;
+
+
+                        case 4:
+
+                        break;
+
+                        default:
+                            System.out.println("Invalid input");
+                            break;
+                    }
+
+                    break;
+
+                case 4:
                     if (!currentUser.getSavedMedia().isEmpty()){
                         selectMedia(currentUser.getSavedMedia());
                     }else{
@@ -143,7 +182,7 @@ public class Menu {
 
                     break;
 
-                case 4:
+                case 5:
                     if (!currentUser.getWatchedMedia().isEmpty()){
                         selectMedia(currentUser.getWatchedMedia());
                     }else{
@@ -155,7 +194,7 @@ public class Menu {
 
 
 
-                case 5:
+                case 6:
                     FileHandler.saveUsers(StreamingService.getUsers());
                     System.out.println("Logging out...");
                     System.out.println("Exiting");
@@ -173,7 +212,7 @@ public class Menu {
     private void selectMedia(ArrayList<Media> listToPrint) {
 
         if (listToPrint.isEmpty()){
-            System.out.println("No media with that name / category");
+            System.out.println("No media with that name / category / rating");
             return;
         }
 
@@ -187,31 +226,40 @@ public class Menu {
 
         int choseMovie = 0;
         while (true) {
-            choseMovie = Userinput.promptInt("Which media do you want to select? (input number)") - 1;
+            choseMovie = Userinput.promptInt("Which media do you want to select? Input 0 to go back. (input number)") - 1;
+
+
+
             if (choseMovie > listToPrint.size()){
                 System.out.println("Invalid, try again");
             }else{
                 break;
             }
+
+
         }
 
-        System.out.println("Selected: " + listToPrint.get(choseMovie));
+        if(choseMovie < 0) {
+            return;
+        }else {
+            System.out.println("Selected: " + listToPrint.get(choseMovie));
 
-        boolean choosing = true;
+            boolean choosing = true;
 
-        while (choosing) {
-            int choiceToDo = Userinput.promptInt("1. Watch " + listToPrint.get(choseMovie).getTitle() + "           2. Add " + listToPrint.get(choseMovie).getTitle() + " to saved list      3. Go back");
+            while (choosing) {
+                int choiceToDo = Userinput.promptInt("1. Watch " + listToPrint.get(choseMovie).getTitle() + "           2. Add " + listToPrint.get(choseMovie).getTitle() + " to saved list      3. Go back");
 
-            if (choiceToDo == 1) {
-                listToPrint.get(choseMovie).play(currentUser);
-                choosing = false;
-            } else if (choiceToDo == 2) {
-                currentUser.addSavedMedia(listToPrint.get(choseMovie));
-                choosing = false;
-            } else if (choiceToDo == 3) {
-                break;
-            } else {
-                System.out.println("Invalid input");
+                if (choiceToDo == 1) {
+                    listToPrint.get(choseMovie).play(currentUser);
+                    choosing = false;
+                } else if (choiceToDo == 2) {
+                    currentUser.addSavedMedia(listToPrint.get(choseMovie));
+                    choosing = false;
+                } else if (choiceToDo == 3) {
+                    break;
+                } else {
+                    System.out.println("Invalid input");
+                }
             }
         }
     }
@@ -227,6 +275,8 @@ public class Menu {
         }
         return results;
     }
+
+
 
 
     public ArrayList<Media> sortByCategory(ArrayList<Category> categories) {
@@ -257,5 +307,35 @@ public class Menu {
             System.out.println(counter + ". " +catagory);
         }
         return categories;
+    }
+
+    public ArrayList<Media> sortByRatingLowestToHighest(){
+        ArrayList<Media> beforeSorting = new ArrayList<>();
+        beforeSorting.addAll(StreamingService.getAllMedia());
+
+        beforeSorting.sort(Comparator.comparingDouble(Media::getRating));
+
+        return beforeSorting;
+    }
+
+    public ArrayList<Media> atLeastThisRating(double rating){
+        ArrayList<Media> beforeSorting = new ArrayList<>();
+        beforeSorting.addAll(StreamingService.getAllMedia());
+
+        beforeSorting.removeIf(item -> item.getRating() < rating);
+
+        beforeSorting.sort(Comparator.comparingDouble(Media::getRating).reversed());
+
+        return beforeSorting;
+    }
+
+    public ArrayList<Media> sortByRatingHighestToLowest(){
+        ArrayList<Media> beforeSorting = new ArrayList<>();
+        beforeSorting.addAll(StreamingService.getAllMedia());
+
+        beforeSorting.sort(Comparator.comparingDouble(Media::getRating).reversed());
+
+        return beforeSorting;
+
     }
 }
